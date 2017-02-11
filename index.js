@@ -21,14 +21,12 @@ request(url, function (err, html) {
             .children[1]        // a
             .children[0].data;  // name
 
-
         // gender
         const gender = $(this)
             .children()[0]      // .AnLi_Title
             .children[3]        // .AnLi_TitleR
             .children[1]        // img
             .attribs['alt'];    // gender
-
 
         // image
         const image = $(this)
@@ -39,15 +37,16 @@ request(url, function (err, html) {
 
         isFemaleIgnored = true;
 
-        if (gender === 'Samec') {
+        // if (gender === 'Samec') {
+            cats[i] = {
+                name: name + '123',
+                gender: gender,
+                image: image
+            };
 
             console.log('-----------------------------------------------', i);
-
-            cats[i] = {
-                name: name,
-                gender: gender,
-                image: image };
-        }
+            console.log(cats);
+        // }
     });
 
     console.log(cats);
