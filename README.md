@@ -1,4 +1,4 @@
-#### Use case
+#### Case study
 # Scrape cats
 
 ## -- This is work in progress --
@@ -7,7 +7,7 @@
 
 Script will scrape cats data from actual cats shelter website.
 
-### Try out this use case.
+### Try out this case study.
 
 Selected data based on single cat:
 - name
