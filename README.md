@@ -1,6 +1,8 @@
 #### Use case
 # Scrape cats
 
+## -- This is work in progress --
+
 ## Description
 
 Script will scrape cats data from actual cats shelter website.
