@@ -28,7 +28,7 @@ Pagination has been ignored, all selected cats are shown in one page.
 
 Then go to
 
-`http://localhost:3000/`
+`http://localhost:3000`
 
 ### Resources
 
