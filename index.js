@@ -1,7 +1,12 @@
+var express = require('express')
+var app = express();
 const request = require("tinyreq");
-const cheerio = require('cheerio')
+const cheerio = require('cheerio');
 
 var url = 'http://zavetisce-ljubljana.si/sl-SI/1433/iscemo-nov-dom-posvoji-macko';
+        // http://zavetisce-ljubljana.si/sl-SI/1433/iscemo-nov-dom-posvoji-macko?ord=1&dir=0&fs=0
+
+// TODO: figure out how not to use pagination
 
 request(url, function (err, html) {
     // console.log(err || html);
@@ -39,7 +44,7 @@ request(url, function (err, html) {
 
         // if (gender === 'Samec') {
             cats[i] = {
-                name: name + '123',
+                name: name,
                 gender: gender,
                 image: image
             };
@@ -47,6 +52,26 @@ request(url, function (err, html) {
             console.log('-----------------------------------------------', i);
             console.log(cats);
         // }
+
+        // outputting cats
+        app.get('/', function (req, res) {
+            var output = '<div>';
+
+            cats.forEach(function(element) {
+                output +=
+                    '<div style="display: block; margin-bottom: 30px;">' +
+                        '<div>' + element.name + '</div>' +
+                        '<div>' + element.gender + '</div>' +
+                        '<br />' +
+                        '<img src="' + element.image  + '">' +
+                    '</div>';
+            });
+
+            output += '</div>';
+
+            res.send(output);
+        })
+
     });
 
     console.log(cats);
@@ -54,4 +79,8 @@ request(url, function (err, html) {
     console.log('Scraped info:');
     console.log('---------------------------------');
     console.log('Cat records: ', cats.length)
+});
+
+app.listen(3000, function () {
+    console.log('Example app listening on port 3000!')
 });

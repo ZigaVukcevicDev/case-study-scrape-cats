@@ -24,7 +24,11 @@ Pagination has been ignored, all selected cats are shown in one page.
 
 ## Run
 
-// TODO
+`npm start`
+
+Then go to
+
+`http://localhost:3000/`
 
 ### Resources
 
