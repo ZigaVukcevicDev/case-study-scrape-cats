@@ -1,22 +1,40 @@
+// https://www.codementor.io/johnnyb/how-to-write-a-web-scraper-in-nodejs-du108266t
+
 var osmosis = require('osmosis');
 
 osmosis
     .get('http://zavetisce-ljubljana.si/sl-SI/1433/iscemo-nov-dom-posvoji-macko?ord=1&dir=0&fs=0')
     .log(console.log)
-    .find('h1')
-    .log(console.log)
-    .set('title')
-    .log(console.log)
     .find('.AnLi_TitleL a')
-    .set('link')
-    .log(console.log)
-    .find('.AnLi_TitleL a img[href]')
-    .set('test')
-    .log(console.log)
+    .set('name')
+    .find('.AnLi_Img')
+    .set('image')
     .data(function(listing) {
         console.log(listing);
     })
+    .done(function(){
+        console.log('Done.');
+    })
 
+
+    .get('http://someUrl.com')
+    .log(console.log)
+    .find('.name')
+    .set('name')
+    .find('img')
+    .set(image)
+    ...
+
+
+
+    // .set('name')
+    //.log(console.log)
+
+
+    //.log(console.log)
+    // .data(function(cats) {
+    //    console.log(cats);
+    //})
 
 /*
 .find('h1 + div a')
@@ -44,3 +62,7 @@ osmosis
 .error(console.log)
 .debug(console.log)
 */
+
+
+
+
