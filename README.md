@@ -7,7 +7,7 @@ Script will scrape cats data from actual cats shelter website.
 
 ### Try out this use case.
 
-Data based on single cat:
+Selected data based on single cat:
 - name
 - image
 - gender (selecting only males)
@@ -23,10 +23,6 @@ Pagination has been ignored, all selected cats are shown in one page.
 ## Run
 
 // TODO
-
-`npm run serve`
-
-Open browser at `http://localhost:8080`
 
 ### Resources
 
