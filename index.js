@@ -5,9 +5,9 @@ const cheerio = require('cheerio');
 
 var url = 'http://zavetisce-ljubljana.si/sl-SI/1433/iscemo-nov-dom-posvoji-macko';
         // http://zavetisce-ljubljana.si/sl-SI/1433/iscemo-nov-dom-posvoji-macko?ord=1&dir=0&fs=0
+        // http://zavetisce-ljubljana.si/sl-SI/1433/iscemo-nov-dom-posvoji-macko?ord=1&dir=0&page=2
 
-// TODO: figure out how not to use pagination
-
+// first request to get number of pages
 request(url, function (error, html) {
     if (error) {
         console.log('Error while requesting!')
@@ -15,71 +15,86 @@ request(url, function (error, html) {
     else {
         const
             $ = cheerio.load(html),
-            noOfCats = $('.animal_renderW .AnLi_item .AnLi_itemM');
+            noOfPages = $('.pagenum');
 
         var cats = [];
 
-        noOfCats.each(function(i, element) {
+        // request per page
+        noOfPages.each(function(index) {
+            console.log('>>> Page:', index + 1)
+            var increasedIndex = index + 1;
 
-            // title
-            const name = $(this)
-                .children()[0]      // .AnLi_Title
-                .children[1]        // .AnLi_TitleL
-                .children[1]        // a
-                .children[0].data;  // name
+            url = 'http://zavetisce-ljubljana.si/sl-SI/1433/iscemo-nov-dom-posvoji-macko?ord=1&dir=0&page=' + increasedIndex;
+            console.log(('>>> Url:', url));
 
-            // gender
-            const gender = $(this)
-                .children()[0]      // .AnLi_Title
-                .children[3]        // .AnLi_TitleR
-                .children[1]        // img
-                .attribs['alt'];    // gender
+            request(url, function (error, html) {
+                if (error) {
+                    console.log('Error while requesting!')
+                }
+                const
+                    $ = cheerio.load(html),
+                    noOfCats = $('.animal_renderW .AnLi_item .AnLi_itemM');
 
-            // image
-            const image = $(this)
-                .children()[1]      // .AnLi_Img
-                .children[1]        // a
-                .children[1]        // img
-                .attribs['src'];    // src
+                noOfCats.each(function (i, element) {
 
-            isFemaleIgnored = false;
+                    // title
+                    const name = $(this)
+                        .children()[0]      // .AnLi_Title
+                        .children[1]        // .AnLi_TitleL
+                        .children[1]        // a
+                        .children[0].data;  // name
 
-            if (!isFemaleIgnored && gender === 'Samec') {
-                cats[i] = {
-                    name: name,
-                    gender: gender,
-                    image: image
-                };
+                    // gender
+                    const gender = $(this)
+                        .children()[0]      // .AnLi_Title
+                        .children[3]        // .AnLi_TitleR
+                        .children[1]        // img
+                        .attribs['alt'];    // gender
 
-                console.log('-----------------------------------------------', i);
-                console.log(cats);
-            }
+                    // image
+                    const image = $(this)
+                        .children()[1]      // .AnLi_Img
+                        .children[1]        // a
+                        .children[1]        // img
+                        .attribs['src'];    // src
 
-            // outputting cats
-            app.get('/', function (req, res) {
-                var output = '<div>';
+                    // isFemaleIgnored = false;
 
-                cats.forEach(function(element) {
-                    output +=
-                        '<div style="display: block; margin-bottom: 30px;">' +
-                            '<div>' + element.name + '</div>' +
-                            '<div>' + element.gender + '</div>' +
-                            '<br />' +
-                            '<img src="' + element.image  + '">' +
-                        '</div>';
+                    // if (!isFemaleIgnored && gender === 'Samec') {
+                        cats[i] = {
+                            name: name,
+                            gender: gender,
+                            image: image
+                        };
+                    // }
+
+                    // outputting cats
+                    app.get('/', function (req, res) {
+                        var output = '<div>';
+
+                        cats.forEach(function (element) {
+                            output +=
+                                '<div style="display: block; margin-bottom: 30px;">' +
+                                '<div>' + element.name + '</div>' +
+                                '<div>' + element.gender + '</div>' +
+                                '<br />' +
+                                '<img src="' + element.image + '">' +
+                                '</div>';
+                        });
+
+                        output += '</div>';
+
+                        res.send(output);
+                    })
                 });
 
-                output += '</div>';
-
-                res.send(output);
+                console.log(cats);
+                console.log('=================================');
+                console.log('Scraped info:');
+                console.log('---------------------------------');
+                console.log('Cat records: ', cats.length)
             })
-        });
-
-        console.log(cats);
-        console.log('=================================');
-        console.log('Scraped info:');
-        console.log('---------------------------------');
-        console.log('Cat records: ', cats.length)
+        }); // end for each of noOfPages
     }
 });
 
