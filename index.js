@@ -37,7 +37,7 @@ request(url, function (error, html) {
 
                 noOfCats.each(function (i, element) {
 
-                    // title
+                    // name
                     const name = $(this)
                         .children()[0]      // .AnLi_Title
                         .children[1]        // .AnLi_TitleL
