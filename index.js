@@ -13,11 +13,10 @@ request(url, function (error, html) {
         console.log('Error while requesting!')
     }
     else {
-        const
-            $ = cheerio.load(html),
-            noOfPages = $('.pagenum');
+        const $ = cheerio.load(html),
+              noOfPages = $('.pagenum');
 
-        var cats = [];
+        var output = '<div>';
 
         // request per page
         noOfPages.each(function(index) {
@@ -27,9 +26,11 @@ request(url, function (error, html) {
             url = 'http://zavetisce-ljubljana.si/sl-SI/1433/iscemo-nov-dom-posvoji-macko?ord=1&dir=0&page=' + increasedIndex;
             console.log(('>>> Url:', url));
 
+            var cats = [];
+
             request(url, function (error, html) {
                 if (error) {
-                    console.log('Error while requesting!')
+                    console.log('Error while requesting!');
                 }
                 const
                     $ = cheerio.load(html),
@@ -68,24 +69,15 @@ request(url, function (error, html) {
                         };
                     // }
 
-                    // outputting cats
-                    app.get('/', function (req, res) {
-                        var output = '<div>';
-
-                        cats.forEach(function (element) {
-                            output +=
-                                '<div style="display: block; margin-bottom: 30px;">' +
-                                '<div>' + element.name + '</div>' +
-                                '<div>' + element.gender + '</div>' +
-                                '<br />' +
-                                '<img src="' + element.image + '">' +
-                                '</div>';
-                        });
-
-                        output += '</div>';
-
-                        res.send(output);
-                    })
+                    cats.forEach(function (element) {
+                        output +=
+                            '<div style="display: block; margin-bottom: 30px;">' +
+                            '<div>' + element.name + '</div>' +
+                            '<div>' + element.gender + '</div>' +
+                            '<br />' +
+                            '<img src="' + element.image + '">' +
+                            '</div>';
+                    });
                 });
 
                 console.log(cats);
@@ -95,6 +87,12 @@ request(url, function (error, html) {
                 console.log('Cat records: ', cats.length)
             })
         }); // end for each of noOfPages
+
+        // outputting cats
+        app.get('/', function (req, res) {
+            output += '</div>';
+            res.send(output);
+        });
     }
 });
 
