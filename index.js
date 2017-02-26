@@ -1,7 +1,7 @@
 var express = require('express')
 var app = express();
-const request = require("tinyreq");
-const cheerio = require('cheerio');
+var request = require('tinyreq');
+var cheerio = require('cheerio');
 
 var url = 'http://zavetisce-ljubljana.si/sl-SI/1433/iscemo-nov-dom-posvoji-macko';
         // http://zavetisce-ljubljana.si/sl-SI/1433/iscemo-nov-dom-posvoji-macko?ord=1&dir=0&fs=0
@@ -16,6 +16,7 @@ request(url, function (error, html) {
         const $ = cheerio.load(html),
               noOfPages = $('.pagenum');
 
+        var cats = [];
         var output = '<div>';
 
         // request per page
@@ -24,9 +25,7 @@ request(url, function (error, html) {
             var increasedIndex = index + 1;
 
             url = 'http://zavetisce-ljubljana.si/sl-SI/1433/iscemo-nov-dom-posvoji-macko?ord=1&dir=0&page=' + increasedIndex;
-            console.log(('>>> Url:', url));
-
-            var cats = [];
+            console.log('>>> Url:', url);
 
             request(url, function (error, html) {
                 if (error) {
